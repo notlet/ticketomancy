@@ -1,0 +1,16 @@
+{
+    "url": "your ticket server url",
+    "keys": {
+        "discord": "discord bot token",
+        "mongodb": "mongodb://db:27017"
+    },
+    "tickets": {
+        "server": "server id",
+        "log": "logging channel id",
+        "categories": {
+            "exampleType1": "category id",
+            "exampleType2": "category id"
+        },
+        "namingFormat": "$TYPE-$NAME-$NUMBER"
+    }
+}

@@ -1,0 +1,27 @@
+version: '3'
+services:
+  ticketomancy:
+    build: .
+    image: ticketomancy
+    container_name: tickets
+    restart: always
+    working_dir: /usr/src/app
+    command: ["yarn", "start"]
+    volumes:
+      - ./:/usr/src/app
+      - ./data:/usr/src/app/data
+      - ./data/transcripts:/usr/src/app/data/transcripts
+    environment:
+      NODE_ENV: production
+    ports:
+      - 5800:3000
+  db:
+    image: mongo
+    container_name: ticketsdb
+    restart: always
+    volumes:
+      - ./data/db:/data/db
+    ports:
+      - 27017:27017
+    logging:
+      driver: "none"

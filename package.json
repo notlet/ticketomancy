@@ -1,0 +1,19 @@
+{
+  "name": "ticketomancy",
+  "version": "1.0.0",
+  "description": "a ticket bot for necromancy discord",
+  "main": "ticketomancy.js",
+  "author": "let",
+  "license": "LGPL-3.0-or-later",
+  "scripts": {
+    "start": "node ticketomancy.js"
+  },
+  "dependencies": {
+    "@keyv/mongo": "^2.2.8",
+    "discord-html-transcripts": "2",
+    "discord.js": "13",
+    "express": "^4.18.2",
+    "keyv": "^4.5.4",
+    "mongodb": "^6.3.0"
+  }
+}
