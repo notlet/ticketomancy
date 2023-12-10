@@ -1,15 +1,31 @@
 {
+    "prefix": "!",
     "url": "your ticket server url",
+    "loadingEmoji": "<a:loading:SOME_ID>",
+    "owner": "your discord id (gives eval and disabled commands access)",
     "keys": {
-        "discord": "discord bot token",
+        "discord": {
+            "token": "your bot token",
+            "clientID": "your client id" 
+        },
+        "cookie": "MC4wMzA5MjEwNzAwMzIwODU0NA",
         "mongodb": "mongodb://db:27017"
     },
     "tickets": {
         "server": "server id",
-        "log": "logging channel id",
         "categories": {
-            "exampleType1": "category id",
-            "exampleType2": "category id"
+            "exampleType1": {
+                "category": "category id",
+                "log": "logging channel id",
+                "blacklist": [],
+                "service": [ "role id of service team for this ticket" ]
+            },
+            "exampleType2": {
+                "category": "category id",
+                "log": "logging channel id",
+                "blacklist": [ "role id that is not allowed to open this ticket" ],
+                "service": [ "role id of service team for this ticket" ]
+            }
         },
         "namingFormat": "$TYPE-$NAME-$NUMBER"
     }

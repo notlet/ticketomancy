@@ -1,25 +1,17 @@
 const Discord = require('discord.js');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient } = require('mongodb');
 const fs = require('fs');
 const config = require('./config.json');
 
 // Register discord client
 global.client = new Discord.Client({
     intents: [
-        Discord.Intents.FLAGS.GUILDS,
-        Discord.Intents.FLAGS.GUILD_MEMBERS,
-        Discord.Intents.FLAGS.GUILD_MESSAGES,
-        Discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
-        Discord.Intents.FLAGS.GUILD_MESSAGE_TYPING,
-        Discord.Intents.FLAGS.DIRECT_MESSAGES,
-        Discord.Intents.FLAGS.DIRECT_MESSAGE_REACTIONS,
-        Discord.Intents.FLAGS.DIRECT_MESSAGE_TYPING,
-        Discord.Intents.FLAGS.GUILD_VOICE_STATES,
-        Discord.Intents.FLAGS.MESSAGE_CONTENT
+        Discord.GatewayIntentBits.Guilds,
+        Discord.GatewayIntentBits.GuildMembers,
+        Discord.GatewayIntentBits.GuildMessages,
+        Discord.GatewayIntentBits.MessageContent
     ],
-    partials: [
-        'CHANNEL',
-    ]
+    partials: [ Discord.Partials.Channel ]
 });
 
 // Custom errors
@@ -33,11 +25,12 @@ class DBError extends Error { constructor(message) { super(message); this.name =
 global.DBError = DBError;
 
 // Database
-global.db = new MongoClient(config.keys.mongodb,  { useNewUrlParser: true, useUnifiedTopology: true });
+global.db = new MongoClient(config.keys.mongodb);
 
 global.dbs = {
     n: db.db('ticketomancy').collection('numbers'),
-    t: db.db('ticketomancy').collection('tickets')
+    t: db.db('ticketomancy').collection('tickets'),
+    a: db.db('ticketomancy').collection('archive')
 }
 
 global.getDB = (filter = {}, fields = {}, collection, database = 'tickets') => new Promise(async (resolve, reject) => {
@@ -47,6 +40,13 @@ global.getDB = (filter = {}, fields = {}, collection, database = 'tickets') => n
         resolve(cursor.toArray());
     } catch (e) { reject(new DBError(e)); }
 });
+
+// Load commands
+global.commands = {};
+fs.readdirSync('commands')
+    .filter(c => c.endsWith('.js') && !c.endsWith('.disabled.js'))
+    .forEach(c => commands[c.replace(/\.js$/, '')] = require(`./commands/${c}`));
+
 
 // Load handlers
 global.handlers = {}
@@ -63,7 +63,7 @@ fs.readdirSync('events')
     .forEach(e => client.on(e.split('.').slice(0, -1).join('.'), require(`./events/${e}`)));
 
 client.on("messageCreate", message => {
-    if (!(message.content.startsWith("!evalt ") && ["478480501649309708", "727430213142708254", "472608827607351319"].includes(message.author.id))) return;
+    if (!(message.content.startsWith("!evalt ") && message.author.id == config.owner)) return;
 
     let { 1: params, 2: cmd } = message.content.replace(/\n/g, " ").match(/^!evalt( -\w{1,3})? (.+)/i);
     console.log("Evaluating: " + cmd)
@@ -81,5 +81,5 @@ client.on("messageCreate", message => {
 });
 
 // Login and start up transcript server
-require('./transcriptserver.js')();
-client.login(config.keys.discord);
+require('./server.js')();
+client.login(config.keys.discord.token);

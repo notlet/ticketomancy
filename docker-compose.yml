@@ -18,10 +18,9 @@ services:
   db:
     image: mongo
     container_name: ticketsdb
+    command: mongod --quiet --logpath /dev/null 
     restart: always
     volumes:
       - ./data/db:/data/db
     ports:
       - 27017:27017
-    logging:
-      driver: "none"

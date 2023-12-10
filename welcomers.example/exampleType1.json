@@ -1,9 +1,0 @@
-{
-    "content": "<@$USER> welcome, a staff member will handle you shortly.",
-    "embeds": [
-        {
-            "title": "test ticket in example category 1 #$NUMBER",
-            "description": "available variables are $USER representing ticket opener's ID, and $NUMBER, representing the ticket number"
-        }
-    ]
-}
