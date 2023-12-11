@@ -11,14 +11,11 @@ services:
       - ./:/usr/src/app
       - ./data:/usr/src/app/data
       - ./data/transcripts:/usr/src/app/data/transcripts
-    environment:
-      NODE_ENV: production
     ports:
-      - 5800:3000
+      - 3000:3000
   db:
     image: mongo
     container_name: ticketsdb
-    command: mongod --quiet --logpath /dev/null 
     restart: always
     volumes:
       - ./data/db:/data/db

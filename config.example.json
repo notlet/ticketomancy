@@ -22,7 +22,7 @@
                 "category": "category for tickets, blank or invalid id will result in no category",
                 "log": "logging channel",
                 "blacklist": [ "role ids that cannot open tickets in this category" ],
-                "service": [ "role ids that will be able to close tickets and access transcripts" ]
+                "team": [ "role ids that will be able to close tickets and access transcripts" ]
             }
         },
         "namingFormat": "$TYPE-$NAME-$NUMBER"

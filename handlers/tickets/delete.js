@@ -13,7 +13,7 @@ module.exports = async (message, reason) => {
     const ticket = await dbs.t.findOne({ channel: channel.id });
     if (!ticket) throw new InputError('This channel is not a ticket!');
 
-    if (!config.tickets.categories[ticket.type].service.map(r => message.member.roles.cache.has(r)).includes(true)) return channel.send({ content: `<@${message.author.id}> has requested to close this ticket!`, allowedMentions: { parse: [] } });
+    if (!config.tickets.categories[ticket.type].team.map(r => message.member.roles.cache.has(r)).includes(true)) return channel.send({ content: `<@${message.author.id}> has requested to close this ticket!`, allowedMentions: { parse: [] } });
 
     await channel.send(`${config.emojis.loading} Creating transcript and deleting ticket...`);
     const ts = await transcript.createTranscript(channel, { returnType: 'buffer', useCDN: true });

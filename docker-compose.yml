@@ -13,11 +13,11 @@ services:
     environment:
       NODE_ENV: production
     ports:
-      - 5800:3000
+      - 3000:3000
   db:
     image: mongo
     container_name: ticketsdb
-    command: mongod --quiet --logpath /dev/null 
+    command: mongod --quiet
     restart: always
     volumes:
       - ./data/db:/data/db

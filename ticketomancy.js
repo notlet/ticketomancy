@@ -27,6 +27,23 @@ global.DBError = DBError;
 // Database
 global.db = new MongoClient(config.keys.mongodb);
 
+// Check if database ticketomancy exists and create if not
+db.connect().then(() => db.db('ticketomancy').listCollections().toArray().then(async collections => {
+        if (!collections.find(c => c.name === 'numbers')) {
+            await db.db('ticketomancy').createCollection('numbers');
+            await db.db('ticketomancy').collection('numbers').createIndex({ t: 1 }, { unique: true });
+        }
+        if (!collections.find(c => c.name === 'tickets')) {
+            await db.db('ticketomancy').createCollection('tickets');
+            await db.db('ticketomancy').collection('tickets').createIndex({ channel: 1 }, { unique: true });
+        }
+        if (!collections.find(c => c.name === 'archive')) {
+            await db.db('ticketomancy').createCollection('archive');
+            await db.db('ticketomancy').collection('archive').createIndex({ user: 1 });
+        }
+}));
+
+
 global.dbs = {
     n: db.db('ticketomancy').collection('numbers'),
     t: db.db('ticketomancy').collection('tickets'),

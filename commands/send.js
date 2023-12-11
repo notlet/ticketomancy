@@ -8,7 +8,7 @@ module.exports = {
     exec: async (args, input, message) => {
         if (message.author.id != config.owner) throw new PermissionsError('Only the owner can use this command.');
         const type = input.split(' ')[0];
-        if (!fs.existsSync(`templates/panels/${type}.json`)) throw new InputError(`Panel for type \`${type}\` does not exist.`);
+        if (!fs.existsSync(`templates/panels/${type}.json`)) throw new InputError(`Panel \`${type}\` does not exist.`);
         await message.delete();
         
         return require(`../templates/panels/${type}.json`);
