@@ -1,30 +1,28 @@
 {
     "prefix": "!",
-    "url": "your ticket server url",
-    "loadingEmoji": "<a:loading:SOME_ID>",
-    "owner": "your discord id (gives eval and disabled commands access)",
+    "url": "https://tickets.example.com",
+    "emojis": {
+        "loading": "<a:loading:SOME_ID>",
+        "created": "🎫",
+        "blacklisted": "⛔"
+    },
+    "owner": "your discord id, allows using !eval",
     "keys": {
         "discord": {
-            "token": "your bot token",
-            "clientID": "your client id" 
+            "token": "your discord bot token",
+            "clientID": "your discord application id (used for oauth)" 
         },
-        "cookie": "MC4wMzA5MjEwNzAwMzIwODU0NA",
+        "cookie": "cookies secret key",
         "mongodb": "mongodb://db:27017"
     },
     "tickets": {
-        "server": "server id",
+        "server": "server that the tickets system will be on",
         "categories": {
-            "exampleType1": {
-                "category": "category id",
-                "log": "logging channel id",
-                "blacklist": [],
-                "service": [ "role id of service team for this ticket" ]
-            },
-            "exampleType2": {
-                "category": "category id",
-                "log": "logging channel id",
-                "blacklist": [ "role id that is not allowed to open this ticket" ],
-                "service": [ "role id of service team for this ticket" ]
+            "example": {
+                "category": "category for tickets, blank or invalid id will result in no category",
+                "log": "logging channel",
+                "blacklist": [ "role ids that cannot open tickets in this category" ],
+                "service": [ "role ids that will be able to close tickets and access transcripts" ]
             }
         },
         "namingFormat": "$TYPE-$NAME-$NUMBER"

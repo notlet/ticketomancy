@@ -1,0 +1,45 @@
+{
+    "title": "Open M3 Tank Ticket",
+    "custom_id": "modal_m3",
+    "components": [
+        {
+            "type": 1,
+            "components": [{
+                "type": 4,
+                "custom_id": "name",
+                "label": "Your Name",
+                "style": 1,
+                "min_length": 2,
+                "max_length": 20,
+                "placeholder": "Ex.: Joe, Peter",
+                "required": true
+            }]
+        },
+        {
+            "type": 1,
+            "components": [{
+                "type": 4,
+                "custom_id": "surname",
+                "label": "Your Surname",
+                "style": 1,
+                "min_length": 2,
+                "max_length": 20,
+                "placeholder": "Ex.: Swanson, Griffin",
+                "required": true
+            }]
+        },
+        {
+            "type": 1,
+            "components": [{
+                "type": 4,
+                "custom_id": "info",
+                "label": "Anything else you would like us to know?",
+                "style": 2,
+                "min_length": 1,
+                "max_length": 1000,
+                "value": "Look into /templates/fields/example.json to define how these fields will be displayed in the ticket",
+                "required": false
+            }]
+        }
+    ]
+}

@@ -1,5 +1,5 @@
 {
-    "content": "test panel hehehehaw",
+    "content": "Click the button to create a new ticket in the example category!\nThe button's custom ID must be `open_[category ID]` in order for it to function.",
     "components": [
         {
             "type": 1,
@@ -8,7 +8,7 @@
                     "type": 2,
                     "label": "Click me!",
                     "style": 1,
-                    "custom_id": "open_m3"
+                    "custom_id": "open_example"
                 }
             ]
         }

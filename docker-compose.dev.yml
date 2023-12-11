@@ -8,6 +8,7 @@ services:
     working_dir: /usr/src/app
     command: ["yarn", "start"]
     volumes:
+      - ./:/usr/src/app
       - ./data:/usr/src/app/data
       - ./data/transcripts:/usr/src/app/data/transcripts
     environment:
@@ -21,3 +22,5 @@ services:
     restart: always
     volumes:
       - ./data/db:/data/db
+    ports:
+      - 27017:27017

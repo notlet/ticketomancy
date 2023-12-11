@@ -3,8 +3,8 @@ const fss = require('fs');
 const config = require('../../config.json');
 const { PermissionsBitField: Permissions, ChannelType } = require('discord.js');
 
-module.exports = async (user, type) => {
-    if (!Object.keys(config.tickets.categories).includes(type) || !fss.existsSync(`json/welcomers/${type}.json`)) throw new InputError('Invalid ticket type!');
+module.exports = async (user, type, options) => {
+    if (!Object.keys(config.tickets.categories).includes(type) || !fss.existsSync(`templates/welcomers/${type}.json`)) throw new InputError('Invalid ticket type!');
     if (!user.username || !user.id) throw new InputError('Invalid user!');
 
     let ticketNumber = (await dbs.n.findOne({ t: type }))?.n;
@@ -35,11 +35,19 @@ module.exports = async (user, type) => {
     await dbs.t.insertOne({ user: user.id, channel: newchannel.id, type, n: ticketNumber });
     await dbs.n.updateOne({ t: type }, { $set: { n: ticketNumber } }, { upsert: true });
 
-    const welcomeMessage = JSON.parse((await fs.readFile(`json/welcomers/${type}.json`, 'utf8'))
+    const welcomeMessage = JSON.parse((await fs.readFile(`templates/welcomers/${type}.json`, 'utf8'))
         .replaceAll('$USER', user.id)
         .replaceAll('$NUMBER', ticketNumber)
         .replaceAll('$PREFIX', config.prefix)
     );
+
+    if (options) {
+        const mappings = fss.existsSync(`templates/fields/${type}.json`) ? require(`../../templates/fields/${type}.json`) : {};
+        welcomeMessage.embeds.push({
+            fields: Object.keys(options).map(o => options[o] ?({ name: mappings[o] || o, value: options[o] }) : null).filter(f => !!f),
+            color: 0
+        })
+    }
 
     await newchannel.send(welcomeMessage);
 
@@ -50,7 +58,7 @@ module.exports = async (user, type) => {
                 title: 'Ticket created',
                 description: `Type: \`${type}\`\nTicket number: \`${ticketNumber}\`\nOpened for: <@${user.id}>`,
                 color: 0x20c407
-            }
+            },
         ]
     });
 
