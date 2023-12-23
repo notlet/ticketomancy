@@ -29,15 +29,13 @@ module.exports = () => new CronJob("0 * * * *", async () => {
             await dbs.t.updateOne({ _id: ticket._id }, { $set: { notified: true } });
         } 
 
-        // auto delete notice
-        if (categoryConfig.autoDelete && currentTimestamp - timestamp >= (categoryConfig.autoDelete - 1) * 36e5) {
+        // auto delete 
+        if (categoryConfig.autoDelete && currentTimestamp - timestamp >= categoryConfig.autoDelete * 36e5) await handlers.tickets.delete(channel, "deleted due to inactivity", client.guilds.cache.get(config.tickets.server).members.me);
+        else if (categoryConfig.autoDelete && currentTimestamp - timestamp >= (categoryConfig.autoDelete - 1) * 36e5) { // auto delete notice
             await channel.send({
                 content: `<@${ticket.user}>`,
                 embeds: [{ description: "This is an activity check; please respond to this ticket as soon as possible, or this ticket will be **DELETED IN 1 HOUR**." }]
             });
         }
-
-        // auto delete
-        if (categoryConfig.autoDelete && currentTimestamp - timestamp >= categoryConfig.autoDelete * 36e5) await handlers.tickets.delete(channel, "deleted due to inactivity", client.guilds.cache.get(config.tickets.server).members.me);
     }
 }, null, true);

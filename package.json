@@ -1,6 +1,6 @@
 {
   "name": "ticketomancy",
-  "version": "1.1.0",
+  "version": "1.1.0.1",
   "description": "a simple discord ticket bot",
   "main": "ticketomancy.js",
   "author": "let",
