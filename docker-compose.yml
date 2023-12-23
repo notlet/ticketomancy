@@ -17,7 +17,6 @@ services:
   db:
     image: mongo
     container_name: ticketsdb
-    command: mongod --quiet
     restart: always
     volumes:
       - ./data/db:/data/db

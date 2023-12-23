@@ -1,4 +1,5 @@
 {
+    "explanations_explanation": "for when I cannot explain what a certain config value does in the value itself, feel free to delete everything suffixed with _explanation",
     "prefix": "!",
     "url": "https://tickets.example.com",
     "emojis": {
@@ -6,7 +7,7 @@
         "created": "🎫",
         "blacklisted": "⛔"
     },
-    "owner": "your discord id, allows using !eval",
+    "owner": "your discord id, allows using !evalt",
     "keys": {
         "discord": {
             "token": "your discord bot token",
@@ -21,6 +22,11 @@
             "example": {
                 "category": "category for tickets, blank or invalid id will result in no category",
                 "log": "logging channel",
+                "notice": 24,
+                "notice_explanation": "ping ticket creator after this many hours pass since the last message",
+                "autoDelete": 168,
+                "autoDelete_explanation": "automatically delete ticket after this many hours pass since the last message (also notifies 1 hour prior)",
+                "dmNotify": true,
                 "blacklist": [ "role ids that cannot open tickets in this category" ],
                 "team": [ "role ids that will be able to close tickets and access transcripts" ]
             }

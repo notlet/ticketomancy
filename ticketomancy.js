@@ -99,4 +99,5 @@ client.on("messageCreate", message => {
 
 // Login and start up transcript server
 require('./server.js')();
+require('./cron.js')();
 client.login(config.keys.discord.token);
