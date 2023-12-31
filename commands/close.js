@@ -10,7 +10,7 @@ module.exports = {
 
         const ticket = await dbs.t.findOne({ channel: message.channel.id });
         if (!ticket) throw new InputError('This channel is not a ticket!');
-        if (!config.tickets.categories[ticket.type].team.map(r => message.member.roles.cache.has(r)).includes(true)) return message.channel.send({ content: `<@${message.author.id}> has requested to close this ticket!`, allowedMentions: { parse: [] } });
+        if (!config.tickets.categories[ticket.type].allowClose && !config.tickets.categories[ticket.type].team.map(r => message.member.roles.cache.has(r)).includes(true)) return message.channel.send({ content: `<@${message.author.id}> has requested to close this ticket!`, allowedMentions: { parse: [] } });
 
         await handlers.tickets.delete(message.channel, reason, message.member);
         return;
