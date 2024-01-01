@@ -15,12 +15,26 @@ module.exports = async (user, type, options) => {
         .replaceAll('$TYPE', type)
         .replaceAll('$NAME', user.username)
         .replaceAll('$NUMBER', ticketNumber);
-    
-    const newchannel = await client.guilds.cache.get(config.tickets.server).channels.create({ 
+
+    const newchannel = await client.guilds.cache.get(config.tickets.server).channels.create({
         name: channelName,
         parent: config.tickets.categories[type].category,
         type: ChannelType.GuildText,
         permissionOverwrites: [
+            {
+                id: client.guilds.cache.get(config.tickets.server).id,
+                deny: [
+                    Permissions.Flags.ViewChannel
+                ]
+            },
+            {
+                id: client.user.id,
+                allow: [
+                    Permissions.Flags.ViewChannel,
+                    Permissions.Flags.ReadMessageHistory,
+                    Permissions.Flags.SendMessages
+                ]
+            },
             {
                 id: user.id,
                 allow: [
@@ -28,10 +42,18 @@ module.exports = async (user, type, options) => {
                     Permissions.Flags.ReadMessageHistory,
                     Permissions.Flags.SendMessages
                 ]
-            }
+            },
+            ...config.tickets.categories[type].team.map(t => ({
+                id: t,
+                allow: [
+                    Permissions.Flags.ViewChannel,
+                    Permissions.Flags.ReadMessageHistory,
+                    Permissions.Flags.SendMessages
+                ]
+            }))
         ]
     });
-    
+
     await dbs.t.insertOne({ user: user.id, channel: newchannel.id, type, n: ticketNumber });
     await dbs.n.updateOne({ t: type }, { $set: { n: ticketNumber } }, { upsert: true });
 
