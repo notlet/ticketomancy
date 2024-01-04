@@ -11,7 +11,7 @@ module.exports = async (user, type, options) => {
     if (typeof ticketNumber != 'number') ticketNumber = 0;
     ticketNumber++;
 
-    const channelName = config.tickets.namingFormat
+    const channelName = (config.tickets.categories[type].namingFormat || config.tickets.namingFormat)
         .replaceAll('$TYPE', type)
         .replaceAll('$NAME', user.username)
         .replaceAll('$NUMBER', ticketNumber);

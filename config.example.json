@@ -29,10 +29,13 @@
                 "autoDelete": 168,
                 "autoDelete_explanation": "automatically delete ticket after this many hours pass since the last message (also notifies 1 hour prior)",
                 "dmNotify": true,
+                "namingFormat": "example-$NAME-$NUMBER",
+                "namingFormat_explanation": "naming format for new tickets, if unset, the global one will be used",
                 "blacklist": [ "role ids that cannot open tickets in this category" ],
                 "team": [ "role ids that will be able to close tickets (if allowClose = false) and access transcripts" ]
             }
         },
-        "namingFormat": "$TYPE-$NAME-$NUMBER"
+        "namingFormat": "$TYPE-$NAME-$NUMBER",
+        "namingFormat_explanation": "naming format for new tickets"
     }
 }
