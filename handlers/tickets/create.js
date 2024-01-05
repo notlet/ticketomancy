@@ -66,7 +66,7 @@ module.exports = async (user, type, options) => {
     if (options) {
         const mappings = fss.existsSync(`templates/fields/${type}.json`) ? require(`../../templates/fields/${type}.json`) : {};
         welcomeMessage.embeds.push({
-            fields: Object.keys(options).map(o => options[o] ?({ name: mappings[o] || o, value: options[o] }) : null).filter(f => !!f),
+            fields: Object.keys(options).map(o => options[o] ?({ name: mappings[o] || o, value: options[o].replace(/(\*|_|`|~|\\)/g, '\\$1') }) : null).filter(f => !!f),
             color: 0
         })
     }
