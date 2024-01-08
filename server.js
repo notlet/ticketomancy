@@ -44,7 +44,7 @@ module.exports = () => {
 
         const ticket = await dbs.a.findOne({ channel: req.params.id });
         if (!ticket) return res.status(404).redirect('https://notlet.dev/error?code=404&nohome=1');
-        if (!config.tickets.categories[ticket.type].team.map(r => memberData.data.roles.includes(r)).includes(true)) return res.status(403).redirect('https://notlet.dev/error?code=403&nohome=1');
+        if (!config.tickets.categories[ticket.type].team.map(r => memberData.data.roles.includes(r)).includes(true) || ticket.user !== memberData.data.user.id) return res.status(403).redirect('https://notlet.dev/error?code=403&nohome=1');
 
         res.contentType('text/html');
         res.send(zlib.brotliDecompressSync(fs.readFileSync(`data/transcripts/${req.params.id}.html.br`)).toString());

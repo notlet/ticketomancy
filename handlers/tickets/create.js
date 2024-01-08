@@ -11,14 +11,14 @@ module.exports = async (user, type, options) => {
     if (typeof ticketNumber != 'number') ticketNumber = 0;
     ticketNumber++;
 
-    const channelName = (config.tickets.categories[type].namingFormat || config.tickets.namingFormat)
+    const channelName = (config.tickets.categories[type].namingFormat || config.tickets.defaults?.namingFormat || `$TYPE-$NAME-$NUMBER`)
         .replaceAll('$TYPE', type)
         .replaceAll('$NAME', user.username)
         .replaceAll('$NUMBER', ticketNumber);
 
     const newchannel = await client.guilds.cache.get(config.tickets.server).channels.create({
         name: channelName,
-        parent: config.tickets.categories[type].category,
+        parent: (config.tickets.categories[type].category || config.tickets.defaults?.category || null),
         type: ChannelType.GuildText,
         permissionOverwrites: [
             {
@@ -73,7 +73,8 @@ module.exports = async (user, type, options) => {
 
     await newchannel.send(welcomeMessage);
 
-    await client.guilds.cache.get(config.tickets.server).channels.cache.get(config.tickets.categories[type].log).send({
+    const logchannel = config.tickets.categories[type].log || config.tickets.defaults?.log || null;
+    if (logchannel) await client.guilds.cache.get(config.tickets.server).channels.cache.get(logchannel).send({
         content: null,
         embeds: [
             {
