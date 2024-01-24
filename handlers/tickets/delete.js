@@ -14,16 +14,16 @@ module.exports = async (channel, reason, closer) => {
     await fs.writeFile(`data/transcripts/${channel.id}.html.br`, zlib.brotliCompressSync(ts));
 
     await dbs.t.deleteOne({ _id: ticket._id });
-    await dbs.a.insertOne({ 
-        type: ticket.type, 
-        n: ticket.n, 
-        user: ticket.user, 
-        deletedBy: closer?.id || 'unknown', 
-        channel: channel.id, 
-        reason, 
-        created: new Date(new ObjectId(ticket._id).getTimestamp()) 
+    await dbs.a.insertOne({
+        type: ticket.type,
+        n: ticket.n,
+        user: ticket.user,
+        deletedBy: closer?.id || 'unknown',
+        channel: channel.id,
+        reason,
+        created: new Date(new ObjectId(ticket._id).getTimestamp())
     });
-    
+
     await channel.delete();
 
     const logchannel = config.tickets.categories[ticket.type].log || config.tickets.defaults?.log || null;
@@ -74,7 +74,7 @@ module.exports = async (channel, reason, closer) => {
                 ]
             }
         ]
-    }).catch(console.warn);
+    }).catch(() => {});
 
     return channel;
 }

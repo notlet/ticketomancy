@@ -7,7 +7,7 @@ const config = require('./config.json');
 
 module.exports = () => {
     const app = express();
-    app.use(session({ 
+    app.use(session({
         secret: config.keys.cookie,
         resave: false,
         saveUninitialized: false,
@@ -37,14 +37,14 @@ module.exports = () => {
             return res.redirect(`https://discord.com/oauth2/authorize?client_id=${config.keys.discord.clientID}&response_type=token&redirect_uri=${encodeURIComponent(`${config.url}/oauth`)}&scope=identify%20guilds.members.read`)
         }
 
-        const memberData = await axios.get(`https://discord.com/api/users/@me/guilds/${config.tickets.server}/member`, { 
-            headers: { Authorization: `${req.session.token_type} ${req.session.token}` } 
+        const memberData = await axios.get(`https://discord.com/api/users/@me/guilds/${config.tickets.server}/member`, {
+            headers: { Authorization: `${req.session.token_type} ${req.session.token}` }
         }).catch(() => {});
         if (!memberData?.data) return;
 
         const ticket = await dbs.a.findOne({ channel: req.params.id });
         if (!ticket) return res.status(404).redirect('https://notlet.dev/error?code=404&nohome=1');
-        if (!config.tickets.categories[ticket.type].team.map(r => memberData.data.roles.includes(r)).includes(true) || ticket.user !== memberData.data.user.id) return res.status(403).redirect('https://notlet.dev/error?code=403&nohome=1');
+        if (!config.tickets.categories[ticket.type].team.map(r => memberData.data.roles.includes(r)).includes(true) && ticket.user !== memberData.data.user.id) return res.status(403).redirect('https://notlet.dev/error?code=403&nohome=1');
 
         res.contentType('text/html');
         res.send(zlib.brotliDecompressSync(fs.readFileSync(`data/transcripts/${req.params.id}.html.br`)).toString());
