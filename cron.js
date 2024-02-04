@@ -21,7 +21,7 @@ module.exports = () => new CronJob("0 * * * *", async () => {
             continue;
         }
 
-        const timestamp = (await channel.messages.fetch({ limit: 100 }))?.filter(m => !m.author.bot)?.last()?.createdTimestamp || new ObjectId(ticket._id).getTimestamp();
+        const timestamp = (await channel.messages.fetch({ limit: 100 }))?.filter(m => !m.author.bot)?.first()?.createdTimestamp || new ObjectId(ticket._id).getTimestamp();
         const now = Date.now();
 
         // activity check
