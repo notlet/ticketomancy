@@ -6,7 +6,7 @@ services:
     container_name: tickets
     restart: always
     working_dir: /usr/src/app
-    command: ["yarn", "start"]
+    command: ["yarn", "start", "--trace-warnings"]
     volumes:
       - ./:/usr/src/app
       - ./data:/usr/src/app/data

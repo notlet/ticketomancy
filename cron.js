@@ -1,6 +1,7 @@
 const config = require('./config.json');
 const { CronJob } = require('cron');
 const { ObjectId } = require('mongodb');
+const { dbs } = require('./ticketomancy.js');
 
 module.exports = () => new CronJob("0 * * * *", async () => {
     const tickets = dbs.t.find({}, { _id: 1, channel: 1, type: 1, user: 1, notified: 1 });
@@ -21,10 +22,10 @@ module.exports = () => new CronJob("0 * * * *", async () => {
         }
 
         const timestamp = (await channel.messages.fetch({ limit: 100 }))?.filter(m => !m.author.bot)?.last()?.createdTimestamp || new ObjectId(ticket._id).getTimestamp();
-        const currentTimestamp = Date.now();
+        const now = Date.now();
 
         // activity check
-        if (categoryConfig.notice && currentTimestamp - timestamp >= categoryConfig.notice * 36e5 && !ticket.notified) {
+        if (categoryConfig.notice && now - timestamp >= categoryConfig.notice * 36e5 && !ticket.notified) {
             await channel.send({
                 content: `<@${ticket.user}>`,
                 embeds: [{ description: "This is an activity check; please respond to this ticket as soon as possible, or this ticket will be deleted soon." }]
@@ -33,8 +34,8 @@ module.exports = () => new CronJob("0 * * * *", async () => {
         } 
 
         // auto delete 
-        if (categoryConfig.autoDelete && currentTimestamp - timestamp >= categoryConfig.autoDelete * 36e5) await handlers.tickets.delete(channel, "deleted due to inactivity", client.guilds.cache.get(config.tickets.server).members.me);
-        else if (categoryConfig.autoDelete && currentTimestamp - timestamp >= (categoryConfig.autoDelete - 1) * 36e5) { // auto delete notice
+        if (categoryConfig.autoDelete && now - timestamp >= categoryConfig.autoDelete * 36e5) await handlers.tickets.delete(channel, "deleted due to inactivity", client.guilds.cache.get(config.tickets.server).members.me);
+        else if (categoryConfig.autoDelete && now - timestamp >= (categoryConfig.autoDelete - 1) * 36e5) { // auto delete notice
             await channel.send({
                 content: `<@${ticket.user}>`,
                 embeds: [{ description: "This is an activity check; please respond to this ticket as soon as possible, or this ticket will be **DELETED IN 1 HOUR**." }]

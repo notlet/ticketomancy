@@ -1,7 +1,9 @@
 const fs = require('fs/promises');
 const fss = require('fs');
+const { dbs } = require('../../ticketomancy.js');
 const config = require('../../config.json');
 const { PermissionsBitField: Permissions, ChannelType } = require('discord.js');
+
 
 module.exports = async (user, type, options) => {
     if (!Object.keys(config.tickets.categories).includes(type) || !fss.existsSync(`templates/welcomers/${type}.json`)) throw new InputError('Invalid ticket type!');
@@ -20,39 +22,27 @@ module.exports = async (user, type, options) => {
         name: channelName,
         parent: (config.tickets.categories[type].category || config.tickets.defaults?.category || null),
         type: ChannelType.GuildText,
-        permissionOverwrites: [
-            {
-                id: client.guilds.cache.get(config.tickets.server).id,
-                deny: [
-                    Permissions.Flags.ViewChannel
-                ]
-            },
-            {
-                id: client.user.id,
-                allow: [
-                    Permissions.Flags.ViewChannel,
-                    Permissions.Flags.ReadMessageHistory,
-                    Permissions.Flags.SendMessages
-                ]
-            },
-            {
-                id: user.id,
-                allow: [
-                    Permissions.Flags.ViewChannel,
-                    Permissions.Flags.ReadMessageHistory,
-                    Permissions.Flags.SendMessages
-                ]
-            },
-            ...config.tickets.categories[type].team.map(t => ({
-                id: t,
-                allow: [
-                    Permissions.Flags.ViewChannel,
-                    Permissions.Flags.ReadMessageHistory,
-                    Permissions.Flags.SendMessages
-                ]
-            }))
-        ]
+        reason: `Ticket #${ticketNumber} created for ${user.username} in category ${type}`
     });
+
+    await newchannel.permissionOverwrites.edit(client.user.id, {
+        ViewChannel: true,
+        ReadMessageHistory: true,
+        SendMessages: true
+    });
+
+    await newchannel.permissionOverwrites.edit(user.id, {
+        ViewChannel: true,
+        ReadMessageHistory: true,
+        SendMessages: true
+    });
+
+    for (const t of config.tickets.categories[type].team) await newchannel.permissionOverwrites.edit(t, {
+        ViewChannel: true,
+        ReadMessageHistory: true,
+        SendMessages: true
+    });
+
 
     await dbs.t.insertOne({ user: user.id, channel: newchannel.id, type, n: ticketNumber });
     await dbs.n.updateOne({ t: type }, { $set: { n: ticketNumber } }, { upsert: true });

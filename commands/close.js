@@ -1,11 +1,11 @@
 const config = require('../config.json');
+const { dbs } = require('../ticketomancy.js');
 
 module.exports = {
     name: 'close',
     aliases: ['delete'],
-    preventDefault: true,
     description: 'close the ticket',
-    exec: async (args, input, message) => {
+    exec: async (input, message) => {
         const reason = input || 'no reason provided';
 
         const ticket = await dbs.t.findOne({ channel: message.channel.id });

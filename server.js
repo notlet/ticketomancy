@@ -4,6 +4,7 @@ const axios = require('axios');
 const fs = require('fs');
 const zlib = require('zlib');
 const config = require('./config.json');
+const { dbs } = require('./ticketomancy.js');
 
 module.exports = () => {
     const app = express();
@@ -15,7 +16,7 @@ module.exports = () => {
         maxAge: 864e6
     }));
 
-    app.get('/', (req, res) => res.redirect('https://notlet.dev'));
+    app.get('/', (req, res) => res.redirect('https://github.com/notlet/ticketomancy'));
 
     app.get('/oauth', async (req, res) => {
         if (Object.keys(req.query).length < 1) return res.send("<script>window.location.href = window.location.href.replace('#', '?')</script>");

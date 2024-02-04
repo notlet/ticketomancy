@@ -17,15 +17,13 @@ global.client = new Discord.Client({
 // Custom errors
 class InputError extends Error { constructor(message) { super(message); this.name = "Input Error"; }}
 global.InputError = InputError;
-class APIError extends Error { constructor(message) { super(message); this.name = "API Error"; }}
-global.APIError = APIError;
 class PermissionsError extends Error { constructor(message) { super(message); this.name = "Permissions Error"; }}
 global.PermissionsError = PermissionsError;
 class DBError extends Error { constructor(message) { super(message); this.name = "Database Error"; }}
 global.DBError = DBError;
 
 // Database
-global.db = new MongoClient(config.keys.mongodb);
+const db = new MongoClient(config.keys.mongodb);
 
 // Check if database ticketomancy exists and create if not
 db.connect().then(() => db.db('ticketomancy').listCollections().toArray().then(async collections => {
@@ -44,41 +42,32 @@ db.connect().then(() => db.db('ticketomancy').listCollections().toArray().then(a
 }));
 
 
-global.dbs = {
+module.exports.dbs = {
     n: db.db('ticketomancy').collection('numbers'),
     t: db.db('ticketomancy').collection('tickets'),
     a: db.db('ticketomancy').collection('archive')
 }
 
-global.getDB = (filter = {}, fields = {}, collection, database = 'tickets') => new Promise(async (resolve, reject) => {
-    try {
-        await db.connect();
-        const cursor = await db.db(database).collection(collection).find(filter, fields);
-        resolve(cursor.toArray());
-    } catch (e) { reject(new DBError(e)); }
-});
-
 // Load commands
-global.commands = {};
-fs.readdirSync('commands')
+global.commands = fs.readdirSync('commands')
     .filter(c => c.endsWith('.js') && !c.endsWith('.disabled.js'))
-    .forEach(c => commands[c.replace(/\.js$/, '')] = require(`./commands/${c}`));
+    .reduce((commands, c) => (commands[c.replace(/\.js$/, '')] = require(`./commands/${c}`), commands), {});
 
 
 // Load handlers
-global.handlers = {}
-fs.readdirSync('handlers').forEach(d => {
-    handlers[d] = {};
-    fs.readdirSync(`handlers/${d}`)
-        .filter(e => e.endsWith('.js') && !e.endsWith('.disabled.js'))
-        .forEach(h => handlers[d][h.split('.').slice(0, -1).join('.')] = require(`./handlers/${d}/${h}`));
-});
+global.handlers = fs.readdirSync('handlers')
+    .reduce((handlers, d) => (handlers[d] = fs.readdirSync(`handlers/${d}`)
+        .filter(h => h.endsWith('.js') && !h.endsWith('.disabled.js'))
+        .reduce((innerHandlers, h) => (innerHandlers[h.split('.').slice(0, -1).join('.')] = require(`./handlers/${d}/${h}`), innerHandlers), {}), handlers), {});
+
 
 // Load events
 fs.readdirSync('events')
     .filter(e => e.endsWith('.js') && !e.endsWith('.disabled.js'))
     .forEach(e => client.on(e.split('.').slice(0, -1).join('.'), require(`./events/${e}`)));
 
+
+// this may be a bit messy but it does work, i copied it over from my Necromancy bot
 client.on("messageCreate", message => {
     if (!(message.content.startsWith("!evalt ") && message.author.id == config.owner)) return;
 
