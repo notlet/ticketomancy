@@ -1,5 +1,6 @@
 const fs = require('fs');
 const config = require('../../config.json');
+const { dbs } = require('./ticketomancy.js');
 
 module.exports = async i => {
     if (i.customId.startsWith('open_')) {
@@ -16,6 +17,6 @@ module.exports = async i => {
         await i.reply({ content: `${config.emojis.loading} Please wait, opening ticket...`, ephemeral: true });
 
         const newchannel = await handlers.tickets.create(i.user, type);
-        return await i.editReply({ content: `${config.emojis.created} Ticket created in <#${newchannel.id}>!`, ephemeral: true }); 
+        return await i.editReply({ content: `${config.emojis.created} Ticket created in <#${newchannel.id}>!`, ephemeral: true });
     }
 }
