@@ -1,6 +1,6 @@
 const fs = require('fs');
 const config = require('../../config.json');
-const { dbs } = require('./ticketomancy.js');
+const { dbs } = require('../../ticketomancy.js');
 
 module.exports = async i => {
     if (i.customId.startsWith('open_')) {
@@ -10,7 +10,7 @@ module.exports = async i => {
 
         const openedAmount = await dbs.t.count({ user: i.user.id, type });
         const openedLimit = config.tickets.categories[type].limit || config.tickets.defaults?.limit || 0;
-        if (limit !== 0 && openedAmount >= openedLimit) return await i.reply({ content: `${config.emojis.blacklisted} You can only open ${openedLimit} ticket${openedLimit !== 1 ? 's' : ''} in this category!`, ephemeral: true });
+        if (openedLimit !== 0 && openedAmount >= openedLimit) return await i.reply({ content: `${config.emojis.blacklisted} You can only open ${openedLimit} ticket${openedLimit !== 1 ? 's' : ''} in this category!`, ephemeral: true });
 
         if (fs.existsSync(`templates/modals/${type}.json`)) return i.showModal(require(`../../templates/modals/${type}.json`));
 
