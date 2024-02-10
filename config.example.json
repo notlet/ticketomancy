@@ -31,6 +31,8 @@
                 "dmNotify": true,
                 "namingFormat": "example-$NAME-$NUMBER",
                 "namingFormat_explanation": "naming format for new tickets, if unset, the default one will be used",
+                "limit": 1,
+                "limit_explanation": "limit how many tickets can one user open in this category, if set to 0, it will be unlimited, if unset, the default one will be used",
                 "blacklist": [ "role ids that cannot open tickets in this category" ],
                 "team": [ "role ids that will be able to close tickets (if allowClose = false) and access transcripts" ]
             }
