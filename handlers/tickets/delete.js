@@ -25,7 +25,7 @@ module.exports = async (channel, reason, closer) => {
         created: new Date(new ObjectId(ticket._id).getTimestamp())
     });
 
-    await channel.delete(`Deleted ticket #${ticketNumber} for ${user.username} in category ${type}`);
+    await channel.delete(`Deleted ticket #${ticket.n} for ${ticket.user} in category ${ticket.type}`);
 
     const logchannel = config.tickets.categories[ticket.type].log || config.tickets.defaults?.log || null;
     if (logchannel) await client.guilds.cache.get(config.tickets.server).channels.cache.get(logchannel).send({
