@@ -2,10 +2,10 @@ const config = require('../../config.json');
 
 module.exports = async message => {
     const match = message.content.match(/^!(\w+)( [\s\S]+)?/);
-    if (!match || ![...Object.keys(commands), ...Object.keys(commands).map(c => c.aliases).flat()].includes(match[1]?.trim())) return;
+    if (!match || ![...Object.keys(commands), ...Object.keys(commands).map(c => commands[c].aliases).filter(c => !!c).flat()].includes(match[1]?.trim())) return;
 
     const input = match[2]?.trim();
-    const command = commands[Object.keys(commands).find(c => c === match[1]?.trim() || c.aliases?.includes(match[1]?.trim()))];
+    const command = commands[Object.keys(commands).find(c => c === match[1]?.trim() || commands[c].aliases?.includes(match[1]?.trim()))];
 
     let resp = "null";
     let error = false;
@@ -30,7 +30,7 @@ module.exports = async message => {
             ]
         };
     } finally {
-        if (!command.preventDefault || error) {
+        if ((!command.preventDefault || error) && resp) {
             if (command.reply) reply.edit(resp);
             else message.channel.send(resp);
         }

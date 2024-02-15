@@ -1,5 +1,6 @@
 const express = require('express');
 const session = require('cookie-session');
+const ratelimit = require('express-rate-limit');
 const axios = require('axios');
 const fs = require('fs');
 const zlib = require('zlib');
@@ -8,6 +9,12 @@ const { dbs } = require('./ticketomancy.js');
 
 module.exports = () => {
     const app = express();
+
+    app.use(ratelimit({
+        windowMs: 10 * 60 * 1000,
+        max: 100
+    }))
+
     app.use(session({
         secret: config.keys.cookie,
         resave: false,
@@ -32,7 +39,9 @@ module.exports = () => {
     })
 
     app.get('/transcript/:id', async (req, res) => {
-        if (!fs.existsSync(`data/transcripts/${req.params.id}.html.br`)) return res.status(404).redirect('https://notlet.dev/error?code=404&nohome=1');
+        const filepath = /^\d+$/.test(req.params.id) ? `data/transcripts/${req.params.id}.html.br` : null;
+
+        if (!filepath || !fs.existsSync(filepath)) return res.status(404).redirect('https://notlet.dev/error?code=404&nohome=1');
         if (!req.session.authorized) {
             req.session.redirect = `${config.url}/transcript/${req.params.id}`;
             return res.redirect(`https://discord.com/oauth2/authorize?client_id=${config.keys.discord.clientID}&response_type=token&redirect_uri=${encodeURIComponent(`${config.url}/oauth`)}&scope=identify%20guilds.members.read`)
@@ -48,7 +57,7 @@ module.exports = () => {
         if (!config.tickets.categories[ticket.type].team.map(r => memberData.data.roles.includes(r)).includes(true) && ticket.user !== memberData.data.user.id) return res.status(403).redirect('https://notlet.dev/error?code=403&nohome=1');
 
         res.contentType('text/html');
-        res.send(zlib.brotliDecompressSync(fs.readFileSync(`data/transcripts/${req.params.id}.html.br`)).toString());
+        res.send(zlib.brotliDecompressSync(fs.readFileSync(filepath)).toString());
     });
 
     app.listen(3000);
