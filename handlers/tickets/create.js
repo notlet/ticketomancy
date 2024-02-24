@@ -2,7 +2,7 @@ const fs = require('fs/promises');
 const fss = require('fs');
 const { dbs } = require('../../ticketomancy.js');
 const config = require('../../config.json');
-const { PermissionsBitField: Permissions, ChannelType } = require('discord.js');
+const { ChannelType, PermissionOverwrites } = require('discord.js');
 
 
 module.exports = async (user, type, options) => {

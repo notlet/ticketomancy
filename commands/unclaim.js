@@ -1,6 +1,7 @@
 const config = require('../config.json');
 const { dbs } = require('../ticketomancy.js');
-// work in progress
+const ratelimit = require('./claim.js').ratelimit;
+
 module.exports = {
     name: 'unclaim',
     aliases: ['unlock'],
@@ -13,10 +14,11 @@ module.exports = {
         if (!config.tickets.categories[ticket.type].team.map(r => message.member.roles.cache.has(r)).includes(true)) throw new PermissionsError('You can\'t unclaim this ticket!');
         
         await dbs.t.updateOne({ _id: ticket._id }, { $unset: { claimed: 1 } }, { upsert: true });
-        message.channel.edit({ 
+        if (ratelimit.check('rename') && message.channel.name.startsWith('claimed-')) message.channel.edit({ 
             name: message.channel.name.substring(8), // c1 l2 a3 i4 m5 e6 d7 -8
             topic: null
-        }).catch(() => message.reply('Failed to rename channel, skipping.'));
+        }).catch(() => message.channel.send('Failed to rename channel, skipping.'));
+        else await message.channel.send('Too many renames, skipping.');
 
         for (const t of config.tickets.categories[ticket.type].team) await message.channel.permissionOverwrites.edit(t, { SendMessages: true });
         await message.channel.permissionOverwrites.delete(message.author.id);
