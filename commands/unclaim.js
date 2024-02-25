@@ -21,7 +21,7 @@ module.exports = {
         else await message.channel.send('Too many renames, skipping.');
 
         for (const t of config.tickets.categories[ticket.type].team) await message.channel.permissionOverwrites.edit(t, { SendMessages: true });
-        await message.channel.permissionOverwrites.delete(message.author.id);
+        await message.channel.permissionOverwrites.delete(ticket.claimed);
 
         return `<@${message.author.id}> Successfully unclaimed ticket.`
     }
