@@ -8,7 +8,7 @@ module.exports = () => new CronJob("0 * * * *", async () => {
 
     for await (const ticket of tickets) {
         const categoryConfig = config.tickets.categories[ticket.type];
-        if (!categoryConfig.notice && config.tickets.defaults?.notce) categoryConfig.notice = config.tickets.defaults.notice;
+        if (!categoryConfig.notice && config.tickets.defaults?.notice) categoryConfig.notice = config.tickets.defaults.notice;
         if (!categoryConfig.autoDelete && config.tickets.defaults?.autoDelete) categoryConfig.autoDelete = config.tickets.defaults.autoDelete;
 
         if (!categoryConfig.notice && !categoryConfig.autoDelete) return;
