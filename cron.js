@@ -28,17 +28,17 @@ module.exports = () => new CronJob("0 * * * *", async () => {
         if (categoryConfig.notice && now - timestamp >= categoryConfig.notice * 36e5 && !ticket.notified) {
             await channel.send({
                 content: `<@${ticket.user}>`,
-                embeds: [{ description: "This is an activity check; please respond to this ticket as soon as possible, or this ticket will be deleted soon." }]
+                embeds: [{ description: `This is an activity check; please respond to this ticket as soon as possible, or this ticket will be deleted in ${categoryConfig.autoDelete >= 48 ? Math.floor((categoryConfig.autoDelete - categoryConfig.notice) / 24) + 'days' : (categoryConfig.autoDelete - categoryConfig.notice) + ' hours'}.` }]
             })
             await dbs.t.updateOne({ _id: ticket._id }, { $set: { notified: true } });
         } 
 
-        // auto delete 
+        // auto delete
         if (categoryConfig.autoDelete && now - timestamp >= categoryConfig.autoDelete * 36e5) await handlers.tickets.delete(channel, "deleted due to inactivity", client.guilds.cache.get(config.tickets.server).members.me);
-        else if (categoryConfig.autoDelete && now - timestamp >= (categoryConfig.autoDelete - 1) * 36e5) { // auto delete notice
+        else if (categoryConfig.autoDelete && now - timestamp >= (categoryConfig.autoDelete - (categoryConfig.autoDelete >= 48 ? 24 : 1)) * 36e5) { // auto delete notice
             await channel.send({
                 content: `<@${ticket.user}>`,
-                embeds: [{ description: "This is an activity check; please respond to this ticket as soon as possible, or this ticket will be **DELETED IN 1 HOUR**." }]
+                embeds: [{ description: `This is an activity check; please respond to this ticket as soon as possible, or **this ticket will be DELETED IN ${categoryConfig.autoDelete >= 48 ? '24 HOURS' : '1 HOUR'}**.` }]
             });
         }
     }
