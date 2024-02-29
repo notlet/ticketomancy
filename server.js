@@ -32,7 +32,7 @@ module.exports = () => {
         req.session.token = req.query.access_token;
         req.session.token_type = req.query.token_type;
         req.session.authorized = true;
-        redirect = req.session.redirect;
+        let redirect = req.session.redirect;
         delete req.session.redirect;
 
         return redirect ? res.redirect(redirect) : res.redirect('https://notlet.dev/error?code=200&nohome=1');

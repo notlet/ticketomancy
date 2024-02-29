@@ -21,4 +21,4 @@ made by [@notlet](https://discord.com/users/478480501649309708)
 - **If you want to fix an issue or manually modify the database, run `docker compose -f docker-compose.dev.yml -d` to run the bot with exposed database port and live code updating (restarting container with no need to rebuild)
 
 # Feedback and bug reports
-If you want to suggest a feature or report a bug, please open a github issue or pull request, or DM me directly on discord.
+If you want to suggest a feature or report a bug, please open a GitHub issue or pull request, or DM me directly on discord.

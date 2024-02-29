@@ -28,7 +28,7 @@ module.exports = () => new CronJob("0 * * * *", async () => {
         if (categoryConfig.notice && now - timestamp >= categoryConfig.notice * 36e5 && !ticket.notified) {
             await channel.send({
                 content: `<@${ticket.user}>`,
-                embeds: [{ description: `This is an activity check; please respond to this ticket as soon as possible, or this ticket will be deleted in ${categoryConfig.autoDelete >= 48 ? Math.floor((categoryConfig.autoDelete - categoryConfig.notice) / 24) + 'days' : (categoryConfig.autoDelete - categoryConfig.notice) + ' hours'}.` }]
+                embeds: [{ description: `This is an activity check; please respond to this ticket as soon as possible, or this ticket will be deleted in ${categoryConfig.autoDelete >= 48 ? Math.floor((categoryConfig.autoDelete - categoryConfig.notice) / 24) + ' days' : (categoryConfig.autoDelete - categoryConfig.notice) + ' hours'}.` }]
             })
             await dbs.t.updateOne({ _id: ticket._id }, { $set: { notified: true } });
         } 

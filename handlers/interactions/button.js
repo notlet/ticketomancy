@@ -5,7 +5,7 @@ const { dbs } = require('../../ticketomancy.js');
 module.exports = async i => {
     if (i.customId.startsWith('open_')) {
         const type = i.customId.split('_')[1];
-        if (!Object.keys(config.tickets.categories).includes(type)) return i.reply({ content: `${config.emojis.blacklisted} Invalid ticket type, please contact the bot administator!${config.owner ? ' (<@' + config.owner + '>)' : ''}`, ephemeral: true });
+        if (!Object.keys(config.tickets.categories).includes(type)) return i.reply({ content: `${config.emojis.blacklisted} Invalid ticket type, please contact the bot administrator!${config.owner ? ' (<@' + config.owner + '>)' : ''}`, ephemeral: true });
         if ([...(config.tickets.defaults?.blacklist || []), ...(config.tickets.categories[type].blacklist || [])].map(r => i.member.roles.cache.has(r)).includes(true)) return await i.reply({ content: `${config.emojis.blacklisted} You cannot create a ticket in this category!`, ephemeral: true });
 
         const openedAmount = await dbs.t.count({ user: i.user.id, type });

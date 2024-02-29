@@ -1,5 +1,4 @@
 const fs = require('fs/promises');
-const fss = require('fs');
 const zlib = require('zlib');
 const { ObjectId } = require('mongodb');
 const transcript = require('discord-html-transcripts');

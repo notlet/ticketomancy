@@ -2,7 +2,7 @@ const fs = require('fs/promises');
 const fss = require('fs');
 const { dbs } = require('../../ticketomancy.js');
 const config = require('../../config.json');
-const { ChannelType, PermissionOverwrites } = require('discord.js');
+const { ChannelType } = require('discord.js');
 
 
 module.exports = async (user, type, options) => {
@@ -56,7 +56,7 @@ module.exports = async (user, type, options) => {
     if (options) {
         const mappings = fss.existsSync(`templates/fields/${type}.json`) ? require(`../../templates/fields/${type}.json`) : {};
         welcomeMessage.embeds.push({
-            fields: Object.keys(options).map(o => options[o] ?({ name: mappings[o] || o, value: options[o].replace(/(\*|_|`|~|\\)/g, '\\$1') }) : null).filter(f => !!f),
+            fields: Object.keys(options).map(o => options[o] ?({ name: mappings[o] || o, value: options[o].replace(/([*_`~\\])/g, '\\$1') }) : null).filter(f => !!f),
             color: 0
         })
     }
