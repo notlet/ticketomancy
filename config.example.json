@@ -7,11 +7,11 @@
         "created": "🎫",
         "blacklisted": "⛔"
     },
-    "owner": "your discord id, allows using !evalt",
+    "owner": "your discord id, allows using the !evalt command",
     "keys": {
         "discord": {
             "token": "your discord bot token",
-            "clientID": "your discord application id (used for oauth)" 
+            "clientID": "your discord application id (used for oauth)"
         },
         "cookie": "cookies secret key",
         "mongodb": "mongodb://db:27017"
@@ -41,6 +41,6 @@
             "namingFormat": "$TYPE-$NAME-$NUMBER",
             "namingFormat_explanation": "naming format for new tickets"
         }
-        
+
     }
 }
