@@ -7,6 +7,13 @@ module.exports = () => new CronJob("0 * * * *", async () => {
     const tickets = dbs.t.find({}, { _id: 1, channel: 1, type: 1, user: 1, notified: 1 });
 
     for await (const ticket of tickets) {
+        // remove bad entries
+        if (!config.tickets.categories.includes(ticket.type)) {
+            console.log(`[cron.js] bad category "${ticket.type}" for ticket ${ticket._id}, removing database entry`);
+            await dbs.t.deleteOne({ _id: ticket._id });
+            continue;
+        }
+
         const categoryConfig = config.tickets.categories[ticket.type];
         if (!categoryConfig.notice && config.tickets.defaults?.notice) categoryConfig.notice = config.tickets.defaults.notice;
         if (!categoryConfig.autoDelete && config.tickets.defaults?.autoDelete) categoryConfig.autoDelete = config.tickets.defaults.autoDelete;
@@ -17,6 +24,7 @@ module.exports = () => new CronJob("0 * * * *", async () => {
 
         // remove orphaned entries
         if (!channel) {
+            console.log(`[cron.js] channel ${ticket.channel} no longer exists, removing database entry`);
             await dbs.t.deleteOne({ _id: ticket._id });
             continue;
         }

@@ -13,7 +13,7 @@ made by [@notlet](https://discord.com/users/478480501649309708)
 2. Rename `config.example.json` to `config.json` and `templates.example` to `templates`
 3. Fill out your config and add at least one ticket category.
 4. Edit the files in your `templates` directory to suit your needs*. 
-5. Set up a domain for your transcript server at port `3000` by default (changeable in `docker-compose.yml`), and specify it in your `config.json`, and add `[your domain]/oauth` to your Application > OAuth2 > General > Redirects.
+5. Set up a domain (and a reverse proxy) for your transcript server at port `3000` by default (changeable in `docker-compose.yml`), and specify it in your `config.json`, and add `[your domain]/oauth` to your Application > OAuth2 > General > Redirects.
 6. Run `docker compose up -d`**.
 7. Done! Run `update.sh` when new commits come out to automatically apply them.
 ---
