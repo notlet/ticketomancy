@@ -8,7 +8,7 @@ module.exports = () => new CronJob("0 * * * *", async () => {
 
     for await (const ticket of tickets) {
         // remove bad entries
-        if (!config.tickets.categories.includes(ticket.type)) {
+        if (!Object.keys(config.tickets.categories).includes(ticket.type)) {
             console.log(`[cron.js] bad category "${ticket.type}" for ticket ${ticket._id}, removing database entry`);
             await dbs.t.deleteOne({ _id: ticket._id });
             continue;
