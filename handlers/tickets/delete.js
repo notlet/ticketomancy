@@ -51,7 +51,7 @@ module.exports = async (channel, reason, closer) => {
     });
     else console.warn(`No log channel set for ${ticket.type}, skipping!`);
 
-    if (config.categories[ticket.type].dmNotify !== false && config.defaults?.dmNotify) await client.users.send(ticket.user, {
+    if (config.categories[ticket.type].dmNotify || config.defaults?.dmNotify) await client.users.send(ticket.user, {
         content: null,
         embeds: [
             {

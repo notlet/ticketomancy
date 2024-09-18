@@ -8,13 +8,13 @@ module.exports = {
         if (message.author.id != config.owner) throw new PermissionsError('Only the owner can use this command.');
 		const { 0: messageID, 1: type } = input.split(' ');
 
-        if (!fs.existsSync(`templates/panels/${type}.json`)) throw new InputError(`Panel \`${type}\` does not exist.`);
+        if (!Object.keys(config.panels).includes(type)) throw new InputError(`Panel \`${type}\` does not exist.`);
 
 		const messageToEdit = await message.channel.messages.fetch(messageID);
 		if (!messageToEdit) throw new InputError(`Message \`${messageID}\` was not found in this channel.`);
 		if (messageToEdit.author.id != message.guild.members.me.id) throw new InputError(`Message \`${messageID}\` was not sent by me, unable to edit it.`);
 
-		await messageToEdit.edit(require(`../templates/panels/${type}.json`));
+		await messageToEdit.edit(config.panels[type]);
         await message.delete();
         
         return;

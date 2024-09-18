@@ -11,7 +11,7 @@ module.exports = async i => {
         const openedLimit = config.categories[type].limit || config.defaults?.limit || 0;
         if (openedLimit !== 0 && openedAmount >= openedLimit) return await i.reply({ content: `${config.emojis.blacklisted} You can only open ${openedLimit} ticket${openedLimit !== 1 ? 's' : ''} in this category!`, ephemeral: true });
 
-        if (fs.existsSync(`templates/modals/${type}.json`)) return i.showModal(require(`../../templates/modals/${type}.json`));
+        if (config.categories[type].modal) return i.showModal(config.categories[type].modal);
 
         await i.reply({ content: `${config.emojis.loading} Please wait, opening ticket...`, ephemeral: true });
 
