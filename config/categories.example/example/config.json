@@ -1,0 +1,17 @@
+{
+	"category": "category for tickets, blank or invalid id will result in no category, if unset, the default one will be used",
+	"log": "logging channel id",
+	"allowClose": false,
+	"allowClose_explanation": "allow users to close tickets (if set to false, only team can close them), if unset, the default one will be used",
+	"notice": 24,
+	"notice_explanation": "ping ticket creator after this many hours pass since the last message, if unset, the default one will be used",
+	"autoDelete": 168,
+	"autoDelete_explanation": "automatically delete ticket after this many hours pass since the last message (also notifies 1 hour prior), if unset, the default one will be used",
+	"dmNotify": true,
+	"namingFormat": "example-$NAME-$NUMBER",
+	"namingFormat_explanation": "naming format for new tickets, if unset, the default one will be used",
+	"limit": 1,
+	"limit_explanation": "limit how many tickets can one user open in this category, if set to 0, it will be unlimited, if unset, the default one will be used",
+	"blacklist": [ "role ids that cannot open tickets in this category" ],
+	"team": [ "role ids that will be able to close tickets (if allowClose = false) and access transcripts" ]
+}

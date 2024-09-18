@@ -4,11 +4,11 @@ services:
     image: ticketomancy
     container_name: tickets
     restart: always
-    working_dir: /usr/src/app
+    working_dir: /tickets
     command: ["yarn", "start"]
     volumes:
-      - ./data:/usr/src/app/data
-      - ./data/transcripts:/usr/src/app/data/transcripts
+      - ./data:/tickets/data
+      - ./data/transcripts:/tickets/data/transcripts
     environment:
       NODE_ENV: production
     ports:

@@ -2,19 +2,19 @@ services:
   ticketomancy:
     build: .
     image: ticketomancy
-    container_name: tickets
+    container_name: ticketsdev
     restart: always
-    working_dir: /usr/src/app
+    working_dir: /tickets
     command: ["yarn", "start", "--trace-warnings"]
     volumes:
-      - ./:/usr/src/app
+      - ./:/tickets
       - ./data:/usr/src/app/data
       - ./data/transcripts:/usr/src/app/data/transcripts
     ports:
       - 3000:3000
   db:
     image: mongo
-    container_name: ticketsdb
+    container_name: ticketsdevdb
     restart: always
     volumes:
       - ./data/db:/data/db

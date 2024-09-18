@@ -1,5 +1,3 @@
-const config = require('../../config.json');
-
 module.exports = async message => {
     const match = message.content.match(/^!(\w+)( [\s\S]+)?/);
     if (!match || ![...Object.keys(commands), ...Object.keys(commands).map(c => commands[c].aliases).filter(c => !!c).flat()].includes(match[1]?.trim())) return;

@@ -1,4 +1,6 @@
 node_modules
 data
 templates
-config.json
+config/global.json
+config/categories
+config/panels

@@ -1,6 +1,5 @@
 {
     "title": "Open Example Ticket",
-    "custom_id": "modal_example",
     "components": [
         {
             "type": 1,
@@ -37,7 +36,7 @@
                 "style": 2,
                 "min_length": 1,
                 "max_length": 1000,
-                "value": "Look into /templates/fields/example.json to define how these fields will be displayed in the ticket. max_length should not exceed 1000 characters as that will create issues for displaying the user's input in ticket.",
+                "value": "Look into ./fields.json to define how these fields will be displayed in the ticket. max_length should not exceed 1000 characters as that will create issues for displaying the user's input in ticket.",
                 "required": false
             }]
         }

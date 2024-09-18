@@ -1,0 +1,38 @@
+{
+    "explanations_explanation": "for when I cannot explain what a certain config value does in the value itself, feel free to delete everything suffixed with _explanation",
+    "prefix": "!",
+    "server": "server that the tickets system will be on",
+    "url": "https://tickets.example.com",
+    "emojis": {
+        "loading": "<a:loading:SOME_ID>",
+        "created": "🎫",
+        "blacklisted": "⛔"
+    },
+    "owner": "your discord id, allows using the !evalt command",
+    "keys": {
+        "discord": {
+            "token": "your discord bot token",
+            "clientID": "your discord application id (used for oauth)"
+        },
+        "cookie": "random cookies secret key",
+        "mongodb": "mongodb://db:27017",
+        "mongodb_explanation": "only change this if you are using an external mongodb server"
+    },
+    "defaults": {
+        "category": "category for tickets, blank or invalid id will result in no category",
+        "log": "logging channel id",
+        "allowClose": false,
+        "allowClose_explanation": "allow users to close tickets (if set to false, only team can close them)",
+        "notice": 24,
+        "notice_explanation": "ping ticket creator after this many hours pass since the last message",
+        "autoDelete": 168,
+        "autoDelete_explanation": "automatically delete ticket after this many hours pass since the last message (also notifies 1 hour prior)",
+        "dmNotify": true,
+        "namingFormat": "$TYPE-$NAME-$NUMBER",
+        "namingFormat_explanation": "naming format for new tickets",
+        "limit": 1,
+        "limit_explanation": "limit how many tickets can one user open in each category, if set to 0, it will be unlimited",
+        "blacklist": [ "role ids that cannot open tickets in this category" ],
+        "team": [ "role ids that will be able to close tickets (if allowClose = false) and access transcripts" ]
+    }
+}

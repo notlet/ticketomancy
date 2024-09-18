@@ -1,5 +1,5 @@
 {
-    "content": "Click the button to create a new ticket in the example category!\nThe button's custom ID must be `open_[category ID]` in order for it to function.",
+    "content": "Click the button to create a new ticket in the example category!\nThe button's custom ID must be `open_[category name]` in order for it to function.",
     "components": [
         {
             "type": 1,

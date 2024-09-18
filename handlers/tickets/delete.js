@@ -3,7 +3,6 @@ const zlib = require('zlib');
 const { ObjectId } = require('mongodb');
 const transcript = require('discord-html-transcripts');
 const { dbs } = require('../../ticketomancy.js');
-const config = require('../../config.json');
 
 module.exports = async (channel, reason, closer) => {
     const ticket = await dbs.t.findOne({ channel: channel.id });
@@ -26,8 +25,8 @@ module.exports = async (channel, reason, closer) => {
 
     await channel.delete(`Deleted ticket #${ticket.n} for ${ticket.user} in category ${ticket.type}`);
 
-    const logchannel = config.tickets.categories[ticket.type].log || config.tickets.defaults?.log || null;
-    if (logchannel) await client.guilds.cache.get(config.tickets.server).channels.cache.get(logchannel).send({
+    const logchannel = config.categories[ticket.type].log || config.defaults?.log || null;
+    if (logchannel) await client.guilds.cache.get(config.server).channels.cache.get(logchannel).send({
         content: null,
         embeds: [
             {
@@ -52,7 +51,7 @@ module.exports = async (channel, reason, closer) => {
     });
     else console.warn(`No log channel set for ${ticket.type}, skipping!`);
 
-    if (config.tickets.categories[ticket.type].dmNotify !== false && config.tickets.defaults?.dmNotify) await client.users.send(ticket.user, {
+    if (config.categories[ticket.type].dmNotify !== false && config.defaults?.dmNotify) await client.users.send(ticket.user, {
         content: null,
         embeds: [
             {

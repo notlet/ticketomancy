@@ -1,6 +1,6 @@
 FROM node:20
 
-WORKDIR /usr/src/app
+WORKDIR /tickets
 
 COPY package*.json yarn.lock ./
 RUN yarn install

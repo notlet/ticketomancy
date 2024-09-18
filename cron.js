@@ -1,4 +1,3 @@
-const config = require('./config.json');
 const { CronJob } = require('cron');
 const { ObjectId } = require('mongodb');
 const { dbs } = require('./ticketomancy.js');
@@ -8,19 +7,19 @@ module.exports = () => new CronJob("0 * * * *", async () => {
 
     for await (const ticket of tickets) {
         // remove bad entries
-        if (!Object.keys(config.tickets.categories).includes(ticket.type)) {
+        if (!Object.keys(config.categories).includes(ticket.type)) {
             console.log(`[cron.js] bad category "${ticket.type}" for ticket ${ticket._id}, removing database entry`);
             await dbs.t.deleteOne({ _id: ticket._id });
             continue;
         }
 
-        const categoryConfig = config.tickets.categories[ticket.type];
-        if (!categoryConfig.notice && config.tickets.defaults?.notice) categoryConfig.notice = config.tickets.defaults.notice;
-        if (!categoryConfig.autoDelete && config.tickets.defaults?.autoDelete) categoryConfig.autoDelete = config.tickets.defaults.autoDelete;
+        const categoryConfig = config.categories[ticket.type];
+        if (!categoryConfig.notice && config.defaults?.notice) categoryConfig.notice = config.defaults.notice;
+        if (!categoryConfig.autoDelete && config.defaults?.autoDelete) categoryConfig.autoDelete = config.defaults.autoDelete;
 
         if (!categoryConfig.notice && !categoryConfig.autoDelete) return;
 
-        const channel = client.guilds.cache.get(config.tickets.server).channels.cache.get(ticket.channel);
+        const channel = client.guilds.cache.get(config.server).channels.cache.get(ticket.channel);
 
         // remove orphaned entries
         if (!channel) {
@@ -42,7 +41,7 @@ module.exports = () => new CronJob("0 * * * *", async () => {
         } else if (categoryConfig.notice && now - timestamp <= categoryConfig.notice * 36e5) await dbs.t.updateOne({ _id: ticket._id }, { $set: { notified: false } }); 
 
         // auto delete
-        if (categoryConfig.autoDelete && now - timestamp >= categoryConfig.autoDelete * 36e5) await handlers.tickets.delete(channel, "deleted due to inactivity", client.guilds.cache.get(config.tickets.server).members.me);
+        if (categoryConfig.autoDelete && now - timestamp >= categoryConfig.autoDelete * 36e5) await handlers.tickets.delete(channel, "deleted due to inactivity", client.guilds.cache.get(config.server).members.me);
         else if (categoryConfig.autoDelete && now - timestamp >= (categoryConfig.autoDelete - (categoryConfig.autoDelete >= 48 ? 24 : 1)) * 36e5 && !ticket.deleteNotified) { // auto delete notice
             await channel.send({
                 content: `<@${ticket.user}>`,
