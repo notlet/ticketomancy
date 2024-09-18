@@ -53,7 +53,7 @@ module.exports = async (user, type, options) => {
     )
 
     if (options) welcomeMessage.embeds.push({
-        fields: Object.keys(options).map(o => options[o] ?({ name: config.categories[type].fields ? config.categories[type].fields[o] : o, value: options[o].replace(/([*_`~\\])/g, '\\$1') }) : null).filter(f => !!f),
+        fields: Object.keys(options).map(o => options[o] ?({ name: config.categories[type].fields ? config.categories[type].fields[o] || o : o, value: options[o].replace(/([*_`~\\])/g, '\\$1') }) : null).filter(f => !!f),
         color: 0
     })
 
