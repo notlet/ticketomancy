@@ -1,6 +1,6 @@
 services:
   ticketomancy:
-    image: ticketomancy
+    image: ghcr.io/notlet/ticketomancy:latest
     container_name: tickets
     restart: always
     volumes:

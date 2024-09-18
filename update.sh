@@ -1,7 +1,11 @@
 #! /bin/bash
-echo Updating...
+echo Stopping containers...
 docker compose down
-git pull
-docker compose build
+
+echo Pulling latest images...
+docker compose pull
+
+echo Starting containers...
 docker compose up -d
+
 echo Update completed.

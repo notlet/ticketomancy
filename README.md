@@ -9,17 +9,25 @@ made by [@notlet](https://discord.com/users/478480501649309708)
 - Dockerized
 
 ## Setup instructions
-1. Clone the repo.
-2. Rename everything ending with `.example` in `config`.
-3. Fill out the global config and add at least one ticket category.
-4. Edit the files in the category config to suit your needs*. 
-5. Set up a domain (and a reverse proxy) for your transcript server on port `3000` by default (changeable in `docker-compose.yml`), and specify it in your global config.
-6. Add `[your domain]/oauth` in the Discord Developers panel under Application > OAuth2 > General > Redirects.
-7. Run `docker compose up -d`**.
-- Done! Run `update.sh` when new commits come out to automatically apply them.
+1. Download the [compose file](https://github.com/notlet/ticketomancy/blob/main/docker-compose.yml).
+
+2. Create `config` and `data` directories.
+
+3. Download the [example global config](https://github.com/notlet/ticketomancy/blob/main/config/global.example.json) into the newly created `config` directory and fill it out.
+
+4. Create at least one category, relying on [the examples](https://github.com/notlet/ticketomancy/tree/main/config/categories.example)*
+- If a category does not have a `modal.json`, it will simply not show a modal on creation. If there are no `fields.json`, the output in ticket will show the IDs instead.
+
+5. Set up a domain (and a reverse proxy) for your transcript server on port `3000` by default (changeable in `docker-compose.yml`), and fill it in your global config.
+- For testing you can use `http://localhost:3000`.
+
+6. Add `https://[your domain]/oauth` in the Discord Developers panel under Application > OAuth2 > General > Redirects.
+
+7. Run `docker compose up -d`.
+- Done! Make sure to run `update.sh` when new updates come out to automatically apply them.
 ---
-- *If a category does not have a `modal.json`, it will not show a modal on creation.
-- **If you want to fix/debug an issue or manually modify the database, run `docker compose -f docker-compose.dev.yml -d` to run the bot with the database port exposed and realtime codebase without needing to rebuild the container.
+
+
 
 # Feedback and bug reports
 If you want to suggest a feature or report a bug, please open a GitHub issue or pull request, or DM me directly on discord.
