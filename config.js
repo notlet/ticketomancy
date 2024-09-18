@@ -4,9 +4,8 @@ const exists = require('fs').existsSync;
 const tryLoading = (file, silent) => new Promise(async (res, rej) => {
 	if (!exists(file) && !silent) return rej('the file does not exist');
 
-	const rawFile = await readFile(file);
-	try { res(JSON.parse(rawFile)); }
-	catch (e) { if (!silent) rej(`failed to parse file`); }
+	try { res(JSON.parse(await readFile(file))); }
+	catch (e) { if (!silent) rej(`failed to read or parse file`); }
 })
 
 module.exports = async () => {
