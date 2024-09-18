@@ -10,7 +10,7 @@ module.exports = async (channel, reason, closer) => {
 
     await channel.send(`${config.emojis.completed} Creating transcript and deleting ticket.`);
     const ts = await transcript.createTranscript(channel, { returnType: 'buffer', useCDN: true });
-    await fs.writeFile(`data/transcripts/${channel.id}.html.br`, zlib.brotliCompressSync(ts));
+    await fs.writeFile(`transcripts/${channel.id}.html.br`, zlib.brotliCompressSync(ts));
 
     await dbs.t.deleteOne({ _id: ticket._id });
     await dbs.a.insertOne({

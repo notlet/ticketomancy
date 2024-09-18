@@ -1,16 +1,11 @@
 services:
   ticketomancy:
-    build: .
     image: ticketomancy
     container_name: tickets
     restart: always
-    working_dir: /tickets
-    command: ["yarn", "start"]
     volumes:
-      - ./data:/tickets/data
-      - ./data/transcripts:/tickets/data/transcripts
-    environment:
-      NODE_ENV: production
+      - ./config:/tickets/config
+      - ./data/transcripts:/tickets/transcripts
     ports:
       - 3000:3000
   db:

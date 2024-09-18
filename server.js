@@ -38,7 +38,7 @@ module.exports = () => {
     })
 
     app.get('/transcript/:id', async (req, res) => {
-        const filepath = /^\d+$/.test(req.params.id) ? `data/transcripts/${req.params.id}.html.br` : null;
+        const filepath = /^\d+$/.test(req.params.id) ? `transcripts/${req.params.id}.html.br` : null;
 
         if (!filepath || !fs.existsSync(filepath)) return res.status(404).redirect('https://notlet.dev/error?code=404&nohome=1');
         if (!req.session.authorized) {
