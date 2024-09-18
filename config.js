@@ -1,11 +1,11 @@
 const { readFile, readdir } = require('fs/promises');
 const exists = require('fs').existsSync;
 
-const tryLoading = (file, silent) => new Promise(async (res, rej) => {
-	if (!exists(file) && !silent) return rej('the file does not exist');
+const tryLoading = (file) => new Promise(async (res, rej) => {
+	if (!exists(file)) return rej('the file does not exist');
 
 	try { res(JSON.parse(await readFile(file))); }
-	catch (e) { if (!silent) rej(`failed to read or parse file`); }
+	catch (e) { rej(`failed to read or parse file`); }
 })
 
 module.exports = async () => {
@@ -27,7 +27,7 @@ module.exports = async () => {
 		if (!category) continue;
 
 		// load up the extra things
-		for (const thing of ['welcomer', 'modal', 'fields']) category[thing] = await tryLoading(`config/categories/${cat}/${thing}.json`, true);
+		for (const thing of ['welcomer', 'modal', 'fields']) if (exists(`config/categories/${cat}/${thing}.json`)) category[thing] = await tryLoading(`config/categories/${cat}/${thing}.json`).catch(e => console.warn(`[config.js] failed to load ${thing} for category "${cat}" (reason: ${e})`));
 
 		// give modals proper custom ids
 		if (category.modal) category.modal.custom_id = `modal_${cat}`;
