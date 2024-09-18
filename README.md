@@ -15,15 +15,16 @@ made by [@notlet](https://discord.com/users/478480501649309708)
 
 3. Download the [example global config](https://github.com/notlet/ticketomancy/blob/main/config/global.example.json) into the newly created `config` directory and fill it out.
 
-4. Create at least one category, relying on [the examples](https://github.com/notlet/ticketomancy/tree/main/config/categories.example)*
+4. Create at least one category, relying on [the examples](https://github.com/notlet/ticketomancy/tree/main/config/categories.example).
 - If a category does not have a `modal.json`, it will simply not show a modal on creation. If there are no `fields.json`, the output in ticket will show the IDs instead.
+5. Set up at least one panel, relying on [the examples](https://github.com/notlet/ticketomancy/tree/main/config/categories.example).
 
-5. Set up a domain (and a reverse proxy) for your transcript server on port `3000` by default (changeable in `docker-compose.yml`), and fill it in your global config.
+6. Set up a domain (and a reverse proxy) for your transcript server on port `3000` by default (changeable in `docker-compose.yml`), and fill it in your global config.
 - For testing you can use `http://localhost:3000`.
 
-6. Add `https://[your domain]/oauth` in the Discord Developers panel under Application > OAuth2 > General > Redirects.
+7. Add `https://[your domain]/oauth` in the Discord Developers panel under Application > OAuth2 > General > Redirects.
 
-7. Run `docker compose up -d`.
+8. Run `docker compose up -d`.
 - Done! Make sure to run `update.sh` when new updates come out to automatically apply them.
 ---
 

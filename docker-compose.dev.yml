@@ -8,8 +8,8 @@ services:
     command: ["yarn", "start", "--trace-warnings"]
     volumes:
       - ./:/tickets
-      - ./data:/usr/src/app/data
-      - ./data/transcripts:/usr/src/app/data/transcripts
+      - ./config:/tickets/config
+      - ./data/transcripts:/tickets/transcripts
     ports:
       - 3000:3000
   db:
